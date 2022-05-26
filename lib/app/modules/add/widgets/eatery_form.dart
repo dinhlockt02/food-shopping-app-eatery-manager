@@ -188,6 +188,9 @@ class EateryForm extends StatelessWidget {
             ),
             if (addController.mediaInfo.value != null)
               Image.memory(addController.mediaInfo.value!.data!),
+            if (addController.mediaInfo.value == null &&
+                addController.eatery?.photoUrl != null)
+              Image.network(addController.eatery!.photoUrl),
             const SizedBox(
               height: 16,
             ),

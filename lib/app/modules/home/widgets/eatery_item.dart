@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_shopping_app/app/model/eatery.dart';
 import 'package:food_shopping_app/app/modules/home/controller.dart';
+import 'package:food_shopping_app/routes/routes.dart';
 import 'package:get/get.dart';
 
 class EateryItem extends StatelessWidget {
@@ -19,6 +20,7 @@ class EateryItem extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
+      onTap: () => Get.offNamed(AppRoutes.ADD, arguments: eatery),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

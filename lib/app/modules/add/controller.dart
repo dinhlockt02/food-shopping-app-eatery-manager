@@ -30,6 +30,27 @@ class AddController extends GetxController {
   final longitudeTextEdittingController = TextEditingController();
   final latitudeTextEdittingController = TextEditingController();
 
+  Eatery? eatery;
+
+  @override
+  void onInit() {
+    super.onInit();
+    eatery = Get.arguments as Eatery?;
+    if (eatery != null) {
+      nameTextEdittingController.text = eatery!.name;
+      emailTextEdittingController.text = eatery!.email;
+      usernameTextEdittingController.text = eatery!.username;
+      worktimeTextEdittingController.text = eatery!.workTime;
+      typeTextEdittingController.text = eatery!.type.value;
+      descriptionTextEdittingController.text = eatery!.description;
+      addressTextEdittingController.text = eatery!.addressEatery.address;
+      longitudeTextEdittingController.text =
+          eatery!.addressEatery.geoPointLocation.longitude.toString();
+      latitudeTextEdittingController.text =
+          eatery!.addressEatery.geoPointLocation.latitude.toString();
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -52,7 +73,11 @@ class AddController extends GetxController {
 
   Future<void> save() async {
     try {
-      await addEatery();
+      if (eatery == null) {
+        await addEatery();
+      } else {
+        await updateEatery();
+      }
     } on Exception catch (e) {
       Get.closeAllSnackbars();
       Get.snackbar("Save error", e.toString());
@@ -84,6 +109,35 @@ class AddController extends GetxController {
     Get.offNamed(AppRoutes.HOME);
   }
 
+  Future<void> updateEatery() async {
+    late String uploadImageUrl;
+    if (mediaInfo.value != null) {
+      uploadImageUrl = await uploadImage(mediaInfo.value!);
+    } else {
+      uploadImageUrl = eatery!.photoUrl;
+    }
+
+    final updatedEatery = eatery!.copyWith(
+      addressEatery: AddressEatery(
+          address: addressTextEdittingController.text,
+          geoPointLocation: GeoPoint(
+              double.parse(latitudeTextEdittingController.text),
+              double.parse(longitudeTextEdittingController.text))),
+      description: descriptionTextEdittingController.text,
+      email: emailTextEdittingController.text,
+      name: nameTextEdittingController.text,
+      photoUrl: uploadImageUrl,
+      username: usernameTextEdittingController.text,
+      workTime: worktimeTextEdittingController.text,
+      type: EateryType(value: typeTextEdittingController.text),
+    );
+
+    await eateryCollectionRef
+        .doc(eatery!.id)
+        .update(updatedEatery.toFirestore());
+    Get.offNamed(AppRoutes.HOME);
+  }
+
   Future<String> uploadImage(MediaInfo mediaInfo) async {
     if (mediaInfo.fileName == null || mediaInfo.data == null)
       throw Exception(
@@ -92,5 +146,43 @@ class AddController extends GetxController {
     final fileImageRef = imageRef.child(fileName);
     await fileImageRef.putData(mediaInfo.data!);
     return await fileImageRef.getDownloadURL();
+  }
+
+  Future<void> issuePassword() async {
+    if (eatery == null) Get.snackbar('Failed', 'Eatery not found');
+    final passwordTextController = TextEditingController();
+    final alertDialog = AlertDialog(
+      title: Text('Issue an password'),
+      content: TextFormField(
+        controller: passwordTextController,
+        decoration: InputDecoration(hintText: "New password"),
+      ),
+      actions: <Widget>[
+        TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              "CANCEL",
+              style: TextStyle(color: Colors.red),
+            )),
+        TextButton(
+            onPressed: () {
+              eateryCollectionRef
+                  .doc(eatery!.id)
+                  .update({"password": passwordTextController.text})
+                  .then((value) => Get.back())
+                  .catchError((Exception err) {
+                    Get.back();
+                    Get.snackbar("Error", err.toString());
+                  });
+            },
+            child: Text(
+              "ISSUE",
+              style: TextStyle(color: Get.theme.primaryColor),
+            ))
+      ],
+    );
+    await showDialog(context: Get.context!, builder: (context) => alertDialog);
   }
 }
