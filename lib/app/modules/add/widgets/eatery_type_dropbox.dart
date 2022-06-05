@@ -3,8 +3,10 @@ import 'package:food_shopping_app/app/model/eatery.dart';
 
 class EateryTypeDropbox extends StatefulWidget {
   final TextEditingController controller;
+  final String initialSelectedValue;
 
-  const EateryTypeDropbox({Key? key, required this.controller})
+  const EateryTypeDropbox(
+      {Key? key, required this.controller, required this.initialSelectedValue})
       : super(key: key);
 
   @override
@@ -12,7 +14,14 @@ class EateryTypeDropbox extends StatefulWidget {
 }
 
 class _EateryTypeDropboxState extends State<EateryTypeDropbox> {
-  String _currentSelectedValue = EateryType.TYPE_FOOD;
+  late String _currentSelectedValue;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentSelectedValue = widget.initialSelectedValue;
+  }
 
   @override
   Widget build(BuildContext context) {

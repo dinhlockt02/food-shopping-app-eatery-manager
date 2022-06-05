@@ -12,7 +12,8 @@ class EateryCollectionConsts {
   static const USERNAME = "username";
   static const WORKTIME = "work_time";
   static const TYPE = "type";
-  static const TYPE_FOOD = "Food";
+  static const TYPE_MEAL = "Meal";
+  static const TYPE_FAST_FOOD = "Fast food";
   static const TYPE_DRINK = "Drink";
   static const TYPE_COFFEE = "Coffee";
   static const TYPE_OTHER = "Others";

@@ -3,12 +3,19 @@ import 'package:food_shopping_app/app/model/address_eatery.dart';
 import 'package:food_shopping_app/core/values/consts.dart';
 
 class EateryType {
-  static const TYPE_FOOD = EateryCollectionConsts.TYPE_FOOD;
+  static const TYPE_MEAL = EateryCollectionConsts.TYPE_MEAL;
   static const TYPE_DRINK = EateryCollectionConsts.TYPE_DRINK;
   static const TYPE_COFFEE = EateryCollectionConsts.TYPE_COFFEE;
   static const TYPE_OTHER = EateryCollectionConsts.TYPE_OTHER;
+  static const TYPE_FAST_FOOD = EateryCollectionConsts.TYPE_FAST_FOOD;
 
-  static const TYPE_VALUES = [TYPE_FOOD, TYPE_DRINK, TYPE_COFFEE, TYPE_OTHER];
+  static const TYPE_VALUES = [
+    TYPE_MEAL,
+    TYPE_DRINK,
+    TYPE_COFFEE,
+    TYPE_OTHER,
+    TYPE_FAST_FOOD
+  ];
 
   String _value = TYPE_OTHER;
   String get value {

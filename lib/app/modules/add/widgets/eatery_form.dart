@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_shopping_app/app/model/eatery.dart';
 import 'package:food_shopping_app/app/modules/add/controller.dart';
 import 'package:food_shopping_app/app/modules/add/widgets/eatery_type_dropbox.dart';
 import 'package:get/get.dart';
@@ -83,7 +84,10 @@ class EateryForm extends StatelessWidget {
               height: 16,
             ),
             EateryTypeDropbox(
-                controller: addController.typeTextEdittingController),
+              controller: addController.typeTextEdittingController,
+              initialSelectedValue:
+                  addController.eatery?.type.value ?? EateryType.TYPE_MEAL,
+            ),
             const SizedBox(
               height: 16,
             ),
